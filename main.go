@@ -3,13 +3,18 @@ package main
 import (
 	"Gozhijiao/vocational"
 	"time"
+
+	"github.com/imroc/req/v3"
 )
 
 //	_ "github.com/mattn/go-sqlite3"
 
 func main() {
-
+	req.DevMode()
 	c := vocational.Login("2017165", "Lty1964664291")
+	c.GetToday()
+	// c.NewGetStuFaceActivityList()
+	//c.GetToday()
 	// f, err := json.Marshal(c)
 
 	// if err != nil {
@@ -27,8 +32,7 @@ func main() {
 	// file.Write(f)
 	// file.Close()
 	for {
-		ret := vocational.GetToday(*c)
-		vocational.NewGetStuFaceActivityList(ret)
+		c.NewGetStuFaceActivityList()
 		time.Sleep(10 * time.Second)
 	}
 

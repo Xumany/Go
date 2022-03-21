@@ -22,14 +22,15 @@ func Login(u, p string) *info {
 	header["device"] = getDeviceEncryption(device, deviceApiVerison, appVersion, emit)
 
 	// 这个函数里面要判断他是否登录成功
-	s, err := req.SetHeaders(header).SetFormData(data).SetResult(&UserInfo.UserInfoda).Post(url)
+	resp, err := req.R().SetHeaders(header).SetFormData(data).Post(url)
 	if err != nil {
 		panic(err)
 	}
-	if s.IsSuccess() {
-		panic("访问失败")
+	if !resp.IsSuccess() {
+		panic("访问错误")
 	}
-	return UserInfo
+	resp.Unmarshal(&UserInfo.UserInfo)
+	return &UserInfo
 }
 
 // 获取最新的APP版本
