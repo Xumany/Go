@@ -26,7 +26,10 @@ func Login(u, p string) *info {
 	if err != nil {
 		panic(err)
 	}
-	return s
+	if s.IsSuccess() {
+		panic("访问失败")
+	}
+	return UserInfo
 }
 
 // 获取最新的APP版本
