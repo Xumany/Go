@@ -15,8 +15,9 @@ func Login(u, p string) *info {
 		device           string = "Xiaomi Redmi K20 Pro"
 		deviceApiVerison string = "10"
 		appVersion       string = getAppVeriosn()
-		url                     = "https://zjyapp.icve.com.cn/newMobileAPI/MobileLogin/newSignIn"
-		data                    = map[string]string{"clientId": "d902c875d5f34c0f93362139f5af0c4c", "sourceType": "2", "userPwd": p, "userName": u, "appVersion": appVersion, "equipmentAppVersion": appVersion, "equipmentApiVersion": deviceApiVerison, "equipmentModel": device}
+		Userinfo         info
+		url              = "https://zjyapp.icve.com.cn/newMobileAPI/MobileLogin/newSignIn"
+		data             = map[string]string{"clientId": "d902c875d5f34c0f93362139f5af0c4c", "sourceType": "2", "userPwd": p, "userName": u, "appVersion": appVersion, "equipmentAppVersion": appVersion, "equipmentApiVersion": deviceApiVerison, "equipmentModel": device}
 	)
 	header["emit"] = emit
 	header["device"] = getDeviceEncryption(device, deviceApiVerison, appVersion, emit)
@@ -29,8 +30,11 @@ func Login(u, p string) *info {
 	if !resp.IsSuccess() {
 		panic("访问错误")
 	}
-	resp.Unmarshal(&UserInfo.UserInfo)
-	return &UserInfo
+	err = resp.Unmarshal(&Userinfo.UserInfo)
+	if err != nil {
+		return nil
+	}
+	return &Userinfo
 }
 
 // 获取最新的APP版本

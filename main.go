@@ -2,7 +2,6 @@ package main
 
 import (
 	"Gozhijiao/vocational"
-	"time"
 
 	"github.com/imroc/req/v3"
 )
@@ -11,8 +10,9 @@ import (
 
 func main() {
 	req.DevMode()
-	c := vocational.Login("2017165", "Lty1964664291")
-	c.GetToday()
+	c := vocational.Login("2011305", "xuduo123A")
+	//c.GetToday()
+	c.GetDate("2022-03-09")
 	// c.NewGetStuFaceActivityList()
 	//c.GetToday()
 	// f, err := json.Marshal(c)
@@ -31,9 +31,9 @@ func main() {
 	// fmt.Println(string(fr))
 	// file.Write(f)
 	// file.Close()
-	for {
-		c.NewGetStuFaceActivityList()
-		time.Sleep(10 * time.Second)
-	}
+	// for {
+	// 	c.NewGetStuFaceActivityList()
+	// 	time.Sleep(10 * time.Second)
+	// }
 
 }
