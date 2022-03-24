@@ -1,6 +1,6 @@
 module Gozhijiao
 
-go 1.17
+go 1.15
 
 require (
 	github.com/hashicorp/errwrap v1.0.0 // indirect
