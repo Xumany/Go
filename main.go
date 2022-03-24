@@ -1,14 +1,12 @@
 package main
 
 import (
-	"Gozhijiao/vocational"
-
 	"github.com/imroc/req/v3"
 )
 
 func main() {
 	req.DevMode()
-	_ = vocational.Login("2011305", "xuduo123A")
+	//_ = vocational.Login("2011305", "xuduo123A")
 	//c.GetToday()
 
 	// c.NewGetStuFaceActivityList()
