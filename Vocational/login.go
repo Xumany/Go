@@ -11,16 +11,16 @@ import (
 // 登录
 func Login(u, p string) *info {
 	var (
-		emit             string = fmt.Sprint(time.Now().Unix(), "000")
-		device           string = "Xiaomi Redmi K20 Pro"
-		deviceApiVerison string = "10"
-		appVersion       string = getAppVeriosn()
+		emit             = fmt.Sprint(time.Now().Unix(), "000")
+		device           = "Xiaomi Redmi K20 Pro"
+		deviceApiVersion = "10"
+		appVersion       = getAppVeriosn()
 		Userinfo         info
 		url              = "https://zjyapp.icve.com.cn/newMobileAPI/MobileLogin/newSignIn"
-		data             = map[string]string{"clientId": "d902c875d5f34c0f93362139f5af0c4c", "sourceType": "2", "userPwd": p, "userName": u, "appVersion": appVersion, "equipmentAppVersion": appVersion, "equipmentApiVersion": deviceApiVerison, "equipmentModel": device}
+		data             = map[string]string{"clientId": "d902c875d5f34c0f93362139f5af0c4c", "sourceType": "2", "userPwd": p, "userName": u, "appVersion": appVersion, "equipmentAppVersion": appVersion, "equipmentApiVersion": deviceApiVersion, "equipmentModel": device}
 	)
 	header["emit"] = emit
-	header["device"] = getDeviceEncryption(device, deviceApiVerison, appVersion, emit)
+	header["device"] = getDeviceEncryption(device, deviceApiVersion, appVersion, emit)
 
 	// 这个函数里面要判断他是否登录成功
 	resp, err := req.R().SetHeaders(header).SetFormData(data).Post(url)

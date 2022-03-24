@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4f4a87fd-b6f4-420d-b268-c2533ad4d310" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Vocational/json.go" beforeDir="false" afterPath="$PROJECT_DIR$/Vocational/types.go" afterDir="false" />
+    <list default="true" id="4f4a87fd-b6f4-420d-b268-c2533ad4d310" name="Default Changelist" comment="Change">
       <change beforePath="$PROJECT_DIR$/Vocational/login.go" beforeDir="false" afterPath="$PROJECT_DIR$/Vocational/login.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Vocational/sign.go" beforeDir="false" afterPath="$PROJECT_DIR$/Vocational/sign.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/request.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +49,10 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Change" />
+    <option name="LAST_COMMIT_MESSAGE" value="Change" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>

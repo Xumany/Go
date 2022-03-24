@@ -6,13 +6,11 @@ import (
 	"github.com/imroc/req/v3"
 )
 
-//	_ "github.com/mattn/go-sqlite3"
-
 func main() {
 	req.DevMode()
-	c := vocational.Login("2011305", "xuduo123A")
+	_ = vocational.Login("2011305", "xuduo123A")
 	//c.GetToday()
-	c.GetDate("2022-03-09")
+
 	// c.NewGetStuFaceActivityList()
 	//c.GetToday()
 	// f, err := json.Marshal(c)
@@ -24,7 +22,7 @@ func main() {
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
-	// fr, err := ioutil.ReadFile("config.json")
+	// fr, err := util.ReadFile("config.json")
 	// if err != nil {
 	// 	panic(err)
 	// }
