@@ -2,6 +2,7 @@ package vocational
 
 import (
 	"crypto/md5"
+	"errors"
 	"fmt"
 	"time"
 
@@ -14,7 +15,7 @@ func Login(u, p string) *info {
 		emit             = fmt.Sprint(time.Now().Unix(), "000")
 		device           = "Xiaomi Redmi K20 Pro"
 		deviceApiVersion = "10"
-		appVersion       = getAppVeriosn()
+		appVersion       = getAppVersion()
 		Userinfo         info
 		url              = "https://zjyapp.icve.com.cn/newMobileAPI/MobileLogin/newSignIn"
 		data             = map[string]string{"clientId": "d902c875d5f34c0f93362139f5af0c4c", "sourceType": "2", "userPwd": p, "userName": u, "appVersion": appVersion, "equipmentAppVersion": appVersion, "equipmentApiVersion": deviceApiVersion, "equipmentModel": device}
@@ -32,13 +33,50 @@ func Login(u, p string) *info {
 	}
 	err = resp.Unmarshal(&Userinfo.UserInfo)
 	if err != nil {
-		return nil
+		panic(err)
 	}
 	return &Userinfo
 }
 
+func (i *info) NewGetStuFaceActivityList() {
+	url := "https://zjyapp.icve.com.cn/newmobileapi/faceteach/newGetStuFaceActivityList"
+	data := map[string]string{"stuId": i.UserInfo.UserID, "newToken": i.UserInfo.NewToken, "classState": "2"}
+	for _, v := range i.Today.DataList {
+		data["activityId"], data["openClassId"] = v.ID, v.OpenClassID
+		resp, err := req.SetHeaders(header).SetFormData(data).Post(url)
+		if err != nil {
+			panic(err)
+		}
+		if !resp.IsSuccess() {
+			panic("访问失败")
+		}
+	}
+}
+func (i *info) IsJoinActivities(kid, OpenClassID string) {
+	_, _ = kid, OpenClassID
+}
+func (i *info) GetToday() {
+	var (
+		url  = "https://zjyapp.icve.com.cn/newMobileAPI/FaceTeach/getStuFaceTeachList"
+		data = map[string]string{"stuId": i.UserInfo.UserID, "faceDate": time.Now().Format("2006-01-02"), "newToken": i.UserInfo.NewToken}
+	)
+	resp, err := req.R().SetFormData(data).SetHeaders(header).Post(url)
+
+	if err != nil {
+		panic(err)
+	}
+	if !resp.IsSuccess() {
+		panic(errors.New("http请求失败"))
+
+	}
+	err = resp.Unmarshal(&i.Today)
+	if err != nil {
+		panic(err)
+	}
+}
+
 // 获取最新的APP版本
-func getAppVeriosn() string {
+func getAppVersion() string {
 	result := &struct {
 		AppVersionInfo struct {
 			VersionCode string `json:"VersionCode"`
@@ -54,9 +92,29 @@ func getAppVeriosn() string {
 			panic(err)
 		}
 	}
-
 	return result.AppVersionInfo.VersionCode
+}
 
+// 获取指定日期课程
+func (i *info) GetDate(date string) {
+	fmt.Sprintln(i)
+	var (
+		url  = "https://zjyapp.icve.com.cn/newmobileapi/faceteach/getStuFaceTeachList"
+		data = map[string]string{"stuId": i.UserInfo.UserID, "faceDate": date, "newToken": i.UserInfo.NewToken}
+	)
+	resp, err := req.R().SetFormData(data).SetHeaders(header).Post(url)
+	if err != nil {
+		panic(err)
+	}
+
+	if !resp.IsSuccess() {
+		panic(errors.New("获取失败"))
+	}
+	err = resp.Unmarshal(&i.Today)
+	if err != nil {
+		fmt.Printf(err.Error())
+		panic(err)
+	}
 }
 
 // 计算设备信息md5
