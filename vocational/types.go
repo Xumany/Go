@@ -1,47 +1,54 @@
 package vocational
 
 var (
-	header = map[string]string{"Content-Type": "application/x-www-form-urlencoded"}
+	header  = map[string]string{"Content-Type": "application/x-www-form-urlencoded"}
+	sendKey = "SCT132670TKeOPbiky28mDLzKZyfniZ9uh"
 )
 
-type info struct {
-	UserInfo LoginInfo
-	Today    Today
-}
-type Today struct {
+type Msg struct {
 	Code     int    `json:"code"`
 	Msg      string `json:"msg"`
-	DataList []struct {
+	IsAttend int    `json:"isAttend"`
+}
+type res struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+}
+type UserInfo struct {
+	Code        int    `json:"code"`
+	Msg         string `json:"msg"`
+	UserType    int    `json:"userType"`
+	UserName    string `json:"userName"`
+	UserID      string `json:"userId"`
+	NewToken    string `json:"newToken"`
+	DisplayName string `json:"displayName"`
+	SchoolName  string `json:"schoolName"`
+	SchoolID    string `json:"schoolId"`
+	DataList    []struct {
 		ID           string `json:"Id"`
 		CourseOpenID string `json:"courseOpenId"`
-		CourseName   string `json:"courseName"`
-		ClassName    string `json:"className"`
-		Title        string `json:"Title"`
 		OpenClassID  string `json:"openClassId"`
-		DateCreated  string `json:"dateCreated"`
-		TeachDate    string `json:"teachDate"`
-		ClassSection string `json:"classSection"`
-		Address      string `json:"Address"`
 		State        int    `json:"state"`
 	} `json:"dataList"`
+	SingIn []ClassRoomInfo
 }
-type LoginInfo struct {
-	Code                int    `json:"code"`
-	UserType            int    `json:"userType"`
-	Token               string `json:"token"`
-	UserName            string `json:"userName"`
-	SecondUserName      string `json:"secondUserName"`
-	UserID              string `json:"userId"`
-	NewToken            string `json:"newToken"`
-	DisplayName         string `json:"displayName"`
-	EmployeeNumber      string `json:"employeeNumber"`
-	URL                 string `json:"url"`
-	SchoolName          string `json:"schoolName"`
-	SchoolID            string `json:"schoolId"`
-	IsValid             int    `json:"isValid"`
-	IsNeedMergeUserName int    `json:"isNeedMergeUserName"`
-	IsZjyUser           int    `json:"isZjyUser"`
-	IsGameUser          int    `json:"isGameUser"`
-	IsNeedUpdatePwd     int    `json:"isNeedUpdatePwd"`
-	PwdMsg              string `json:"pwdMsg"`
+
+type Classroom struct {
+	Code     int             `json:"code"`
+	Msg      string          `json:"msg"`
+	DataList []ClassRoomInfo `json:"dataList"`
+}
+type ClassRoomInfo struct {
+	ID          string `json:"Id"`
+	KID         string
+	DataType    string `json:"DataType"`
+	SignType    int    `json:"SignType"`
+	Gesture     string `json:"Gesture"`
+	OpenClassID string
+	State       int `json:"State"`
+}
+type Config struct {
+	User    string
+	Pass    string
+	SendKey string
 }

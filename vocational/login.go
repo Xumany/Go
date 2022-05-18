@@ -2,77 +2,131 @@ package vocational
 
 import (
 	"crypto/md5"
-	"errors"
 	"fmt"
 	"time"
 
 	"github.com/imroc/req/v3"
 )
 
-// 登录
-func Login(u, p string) *info {
+//  现在访问过多会曝出 504 的错误
+
+// Login 登录
+func Login(u, p string) *UserInfo {
 	var (
 		emit             = fmt.Sprint(time.Now().Unix(), "000")
 		device           = "Xiaomi Redmi K20 Pro"
 		deviceApiVersion = "10"
 		appVersion       = getAppVersion()
-		Userinfo         info
+		Userinfo         UserInfo
 		url              = "https://zjyapp.icve.com.cn/newMobileAPI/MobileLogin/newSignIn"
 		data             = map[string]string{"clientId": "d902c875d5f34c0f93362139f5af0c4c", "sourceType": "2", "userPwd": p, "userName": u, "appVersion": appVersion, "equipmentAppVersion": appVersion, "equipmentApiVersion": deviceApiVersion, "equipmentModel": device}
 	)
 	header["emit"] = emit
 	header["device"] = getDeviceEncryption(device, deviceApiVersion, appVersion, emit)
-
-	// 这个函数里面要判断他是否登录成功
 	resp, err := req.R().SetHeaders(header).SetFormData(data).Post(url)
 	if err != nil {
 		panic(err)
 	}
 	if !resp.IsSuccess() {
-		panic("访问错误")
+		panic(resp.Error())
 	}
-	err = resp.Unmarshal(&Userinfo.UserInfo)
+	err = resp.Unmarshal(&Userinfo)
 	if err != nil {
 		panic(err)
 	}
+	if Userinfo.Code != 1 {
+		panic(Userinfo.Msg)
+	}
 	return &Userinfo
 }
-
-func (i *info) NewGetStuFaceActivityList() {
+func (i *UserInfo) NewGetStuFaceActivityList() {
 	url := "https://zjyapp.icve.com.cn/newmobileapi/faceteach/newGetStuFaceActivityList"
-	data := map[string]string{"stuId": i.UserInfo.UserID, "newToken": i.UserInfo.NewToken, "classState": "2"}
-	for _, v := range i.Today.DataList {
+	var c Classroom
+	data := map[string]string{"stuId": i.UserID, "newToken": i.NewToken, "classState": "2"}
+	for _, v := range i.DataList {
 		data["activityId"], data["openClassId"] = v.ID, v.OpenClassID
 		resp, err := req.SetHeaders(header).SetFormData(data).Post(url)
 		if err != nil {
 			panic(err)
 		}
 		if !resp.IsSuccess() {
-			panic("访问失败")
+			panic(resp.Error())
+		}
+
+		err = resp.Unmarshal(&c)
+		if err != nil {
+			panic(err)
+		}
+		if c.Code != 1 {
+			panic(c.Msg)
+		}
+		for _, n := range c.DataList {
+			if n.DataType == "签到" && n.State != 3 {
+				n.KID, n.OpenClassID = v.ID, v.OpenClassID
+				i.SingIn = append(i.SingIn, n)
+			}
 		}
 	}
 }
-func (i *info) IsJoinActivities(kid, OpenClassID string) {
-	_, _ = kid, OpenClassID
+func (i *UserInfo) IsJoinActivities() {
+	var url = "https://zjyapp.icve.com.cn/newmobileapi/faceteach/IsJoinActivities"
+	var data = map[string]string{"newToken": i.NewToken, "stuId": i.UserID, "typeId": "1"}
+	var msg Msg
+	for _, v := range i.SingIn {
+		data["activityId"], data["openClassId"], data["typeId"] = v.KID, v.OpenClassID, v.ID
+		resp, err := req.SetHeaders(header).SetFormData(data).Post(url)
+		if err != nil {
+			panic(err)
+		}
+		if !resp.IsSuccess() {
+			panic(resp.Error())
+		}
+		err = resp.Unmarshal(&msg)
+		if err != nil {
+			panic(err)
+		}
+		if msg.IsAttend != 1 {
+			medata := map[string]string{"signId": v.ID, "stuId": i.UserID, "openClassId": v.OpenClassID, "sourceType": "3", "checkInCode": v.Gesture, "activityId": v.KID, "newToken": i.NewToken}
+			resp, err = req.SetHeaders(header).SetFormData(medata).Post("https://zjyapp.icve.com.cn/newmobileapi/faceteach/saveStuSignNew")
+			if err != nil {
+				panic(err)
+			}
+			if !resp.IsSuccess() {
+				panic(resp.Error())
+			}
+			m := res{}
+			_ = resp.Unmarshal(&m)
+			if m.Msg == "签到成功！" {
+				fmt.Println("签到成功")
+				_, err = req.Get(fmt.Sprintf("https://sctapi.ftqq.com/%s.send?title=%s&desp=%s", sendKey, "签到成功", time.Now().Format("2006-01-02 15:04-05")+"签到成功"))
+				if err != nil {
+					panic(err)
+				}
+			}
+		}
+
+	}
 }
-func (i *info) GetToday() {
+func (i *UserInfo) GetToday() {
 	var (
 		url  = "https://zjyapp.icve.com.cn/newMobileAPI/FaceTeach/getStuFaceTeachList"
-		data = map[string]string{"stuId": i.UserInfo.UserID, "faceDate": time.Now().Format("2006-01-02"), "newToken": i.UserInfo.NewToken}
+		data = map[string]string{"stuId": i.UserID, "faceDate": time.Now().Format("2006-01-02"), "newToken": i.NewToken}
 	)
 	resp, err := req.R().SetFormData(data).SetHeaders(header).Post(url)
-
 	if err != nil {
 		panic(err)
 	}
-	if !resp.IsSuccess() {
-		panic(errors.New("http请求失败"))
+	if resp.IsSuccess() {
+		err = resp.Unmarshal(&i)
+		if err != nil {
+			return
+		}
+		if i.Code != 1 {
+			panic(i.Msg)
+		}
 
 	}
-	err = resp.Unmarshal(&i.Today)
-	if err != nil {
-		panic(err)
-	}
+	return
 }
 
 // 获取最新的APP版本
@@ -95,12 +149,12 @@ func getAppVersion() string {
 	return result.AppVersionInfo.VersionCode
 }
 
-// 获取指定日期课程
-func (i *info) GetDate(date string) {
-	fmt.Sprintln(i)
+// GetDate 获取指定日期课程
+func (i *UserInfo) GetDate(date string) {
+
 	var (
 		url  = "https://zjyapp.icve.com.cn/newmobileapi/faceteach/getStuFaceTeachList"
-		data = map[string]string{"stuId": i.UserInfo.UserID, "faceDate": date, "newToken": i.UserInfo.NewToken}
+		data = map[string]string{"stuId": i.UserID, "faceDate": date, "newToken": i.NewToken}
 	)
 	resp, err := req.R().SetFormData(data).SetHeaders(header).Post(url)
 	if err != nil {
@@ -108,12 +162,14 @@ func (i *info) GetDate(date string) {
 	}
 
 	if !resp.IsSuccess() {
-		panic(errors.New("获取失败"))
+		panic(resp.Error())
 	}
-	err = resp.Unmarshal(&i.Today)
+	err = resp.Unmarshal(&i)
 	if err != nil {
-		fmt.Printf(err.Error())
 		panic(err)
+	}
+	if i.Code != 1 {
+		panic(i.Msg)
 	}
 }
 

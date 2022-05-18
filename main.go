@@ -2,12 +2,18 @@ package main
 
 import (
 	"Gozhijiao/vocational"
-	"github.com/imroc/req/v3"
+	"time"
 )
 
 func main() {
-	req.DevMode()
-	c := vocational.Login("2011305", "xuduo123A")
-	c.GetDate("2022-03-24")
-	c.NewGetStuFaceActivityList()
+	// req.DevMode()
+
+	c := vocational.Login("2011307", "19164440516XQC@")
+	for {
+		c.GetToday()
+		c.NewGetStuFaceActivityList()
+		c.IsJoinActivities()
+		time.Sleep(5 * time.Second)
+	}
+
 }
