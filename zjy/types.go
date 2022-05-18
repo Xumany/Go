@@ -1,8 +1,8 @@
-package vocational
+package zjy
 
 var (
 	header  = map[string]string{"Content-Type": "application/x-www-form-urlencoded"}
-	sendKey = "SCT132670TKeOPbiky28mDLzKZyfniZ9uh"
+	sendKey string
 )
 
 type Msg struct {

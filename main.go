@@ -1,19 +1,22 @@
 package main
 
 import (
-	"Gozhijiao/vocational"
+	"Gozhijiao/zjy"
+	"fmt"
 	"time"
+
+	"github.com/fufuok/xdaemon"
+	"github.com/imroc/req/v3"
 )
 
 func main() {
-	// req.DevMode()
-
-	c := vocational.Login("2011307", "19164440516XQC@")
-	for {
-		c.GetToday()
-		c.NewGetStuFaceActivityList()
-		c.IsJoinActivities()
-		time.Sleep(5 * time.Second)
+	req.DevMode()
+	logfile := "run.log"
+	xdaemon.Background(logfile, true)
+	zjyinfo, err := zjy.Login("2011305", "xuduo123A", "SCT11035TaAJBnQTTAJND3rnfQTuPUuEU")
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
-
+	zjyinfo.Run(5 * time.Second)
 }

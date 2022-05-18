@@ -1,8 +1,10 @@
-package vocational
+package zjy
 
 import (
 	"crypto/md5"
+	"errors"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/imroc/req/v3"
@@ -11,7 +13,8 @@ import (
 //  现在访问过多会曝出 504 的错误
 
 // Login 登录
-func Login(u, p string) *UserInfo {
+func Login(u, p, key string) (*UserInfo, error) {
+	sendKey = key
 	var (
 		emit             = fmt.Sprint(time.Now().Unix(), "000")
 		device           = "Xiaomi Redmi K20 Pro"
@@ -28,37 +31,40 @@ func Login(u, p string) *UserInfo {
 		panic(err)
 	}
 	if !resp.IsSuccess() {
-		panic(resp.Error())
+		return nil, errors.New("Response fail.")
 	}
 	err = resp.Unmarshal(&Userinfo)
 	if err != nil {
-		panic(err)
+		return nil, errors.New("json Unmarshal fail.")
 	}
 	if Userinfo.Code != 1 {
-		panic(Userinfo.Msg)
+		return nil, errors.New(Userinfo.Msg)
 	}
-	return &Userinfo
+	return &Userinfo, nil
 }
-func (i *UserInfo) NewGetStuFaceActivityList() {
+func (i *UserInfo) NewGetStuFaceActivityList() error {
+	if len(i.DataList) >= 0 {
+		return errors.New("data list Resp Fail")
+	}
 	url := "https://zjyapp.icve.com.cn/newmobileapi/faceteach/newGetStuFaceActivityList"
 	var c Classroom
 	data := map[string]string{"stuId": i.UserID, "newToken": i.NewToken, "classState": "2"}
+
 	for _, v := range i.DataList {
 		data["activityId"], data["openClassId"] = v.ID, v.OpenClassID
 		resp, err := req.SetHeaders(header).SetFormData(data).Post(url)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		if !resp.IsSuccess() {
-			panic(resp.Error())
+			return errors.New("Http Response fail. http.statusCode:" + strconv.Itoa(resp.StatusCode))
 		}
-
 		err = resp.Unmarshal(&c)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		if c.Code != 1 {
-			panic(c.Msg)
+			return errors.New(c.Msg)
 		}
 		for _, n := range c.DataList {
 			if n.DataType == "签到" && n.State != 3 {
@@ -67,8 +73,9 @@ func (i *UserInfo) NewGetStuFaceActivityList() {
 			}
 		}
 	}
+	return i.IsJoinActivities()
 }
-func (i *UserInfo) IsJoinActivities() {
+func (i *UserInfo) IsJoinActivities() error {
 	var url = "https://zjyapp.icve.com.cn/newmobileapi/faceteach/IsJoinActivities"
 	var data = map[string]string{"newToken": i.NewToken, "stuId": i.UserID, "typeId": "1"}
 	var msg Msg
@@ -76,57 +83,57 @@ func (i *UserInfo) IsJoinActivities() {
 		data["activityId"], data["openClassId"], data["typeId"] = v.KID, v.OpenClassID, v.ID
 		resp, err := req.SetHeaders(header).SetFormData(data).Post(url)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		if !resp.IsSuccess() {
-			panic(resp.Error())
+			return errors.New("Http Response fail. http.statusCode:" + strconv.Itoa(resp.StatusCode))
 		}
 		err = resp.Unmarshal(&msg)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		if msg.IsAttend != 1 {
 			medata := map[string]string{"signId": v.ID, "stuId": i.UserID, "openClassId": v.OpenClassID, "sourceType": "3", "checkInCode": v.Gesture, "activityId": v.KID, "newToken": i.NewToken}
 			resp, err = req.SetHeaders(header).SetFormData(medata).Post("https://zjyapp.icve.com.cn/newmobileapi/faceteach/saveStuSignNew")
 			if err != nil {
-				panic(err)
+				return err
 			}
 			if !resp.IsSuccess() {
-				panic(resp.Error())
+				return errors.New("Http Response fail. http.statusCode:" + strconv.Itoa(resp.StatusCode))
 			}
 			m := res{}
 			_ = resp.Unmarshal(&m)
 			if m.Msg == "签到成功！" {
-				fmt.Println("签到成功")
 				_, err = req.Get(fmt.Sprintf("https://sctapi.ftqq.com/%s.send?title=%s&desp=%s", sendKey, "签到成功", time.Now().Format("2006-01-02 15:04-05")+"签到成功"))
 				if err != nil {
-					panic(err)
+					return errors.New("Http Response fail. http.statusCode:" + strconv.Itoa(resp.StatusCode))
 				}
 			}
 		}
 
 	}
+	return nil
 }
-func (i *UserInfo) GetToday() {
+func (i *UserInfo) GetToday() error {
 	var (
 		url  = "https://zjyapp.icve.com.cn/newMobileAPI/FaceTeach/getStuFaceTeachList"
 		data = map[string]string{"stuId": i.UserID, "faceDate": time.Now().Format("2006-01-02"), "newToken": i.NewToken}
 	)
 	resp, err := req.R().SetFormData(data).SetHeaders(header).Post(url)
 	if err != nil {
-		panic(err)
+		return err
 	}
-	if resp.IsSuccess() {
-		err = resp.Unmarshal(&i)
-		if err != nil {
-			return
-		}
-		if i.Code != 1 {
-			panic(i.Msg)
-		}
-
+	if !resp.IsSuccess() {
+		return errors.New("Http Response fail. http.statusCode:" + strconv.Itoa(resp.StatusCode))
 	}
-	return
+	err = resp.Unmarshal(&i)
+	if err != nil {
+		return err
+	}
+	if i.Code != 1 {
+		return errors.New(i.Msg)
+	}
+	return i.NewGetStuFaceActivityList()
 }
 
 // 获取最新的APP版本
@@ -194,4 +201,16 @@ func md5str(str string) string {
 	has := md5.Sum(data)
 	md5str1 := fmt.Sprintf("%x", has)
 	return md5str1
+}
+
+func (i *UserInfo) Run(t time.Duration) error {
+	for {
+		err := i.GetToday()
+		if err != nil {
+			fmt.Println(err.Error())
+			time.Sleep(1 * time.Minute)
+			continue
+		}
+		time.Sleep(t)
+	}
 }

@@ -1,0 +1,132 @@
+2022/05/18 15:49:26.324254 DEBUG [req] GET https://zjy2.icve.com.cn/portal/AppVersion/getLatestVersionInfo
+GET /portal/AppVersion/getLatestVersionInfo HTTP/1.1
+Host: zjy2.icve.com.cn
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+Accept-Encoding: gzip
+
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Content-Type: text/html; charset=utf-8
+Date: Wed, 18 May 2022 07:49:26 GMT
+Expires: -1
+Pragma: no-cache
+Set-Cookie: acw_tc=707c9fcb16528601667652366e12a864a09414a4242e72f3eb18b87fdf939c;path=/;HttpOnly;Max-Age=1800
+X-Powered-By: TXTEK
+X-Route-Ip: 172.16.0.213:82
+X-Upstream: 0-213
+Content-Length: 212
+
+{"code":1,"appVersionInfo":{"VersionCode":"2.8.42","VersionSize":28.00,"VersionDatetime":"2021-01-25","VersionDownload":"https://imtt.dd.qq.com/16891/apk/D3E6EDC03918D22157E622ADE4B79DD3.apk?apptime=1652860167"}}
+2022/05/18 15:49:26.756287 DEBUG [req] POST https://zjyapp.icve.com.cn/newMobileAPI/MobileLogin/newSignIn
+POST /newMobileAPI/MobileLogin/newSignIn HTTP/1.1
+Host: zjyapp.icve.com.cn
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+Content-Length: 201
+Content-Type: application/x-www-form-urlencoded
+Device: e0e826372a632f59651798e7edb043a9
+Emit: 1652860166000
+Accept-Encoding: gzip
+
+appVersion=2.8.42&clientId=d902c875d5f34c0f93362139f5af0c4c&equipmentApiVersion=10&equipmentAppVersion=2.8.42&equipmentModel=Xiaomi+Redmi+K20+Pro&sourceType=2&userName=2011307&userPwd=19164440516XQC%40
+HTTP/1.1 200 OK
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+Access-Control-Allow-Origin: *
+Cache-Control: no-cache
+Content-Length: 541
+Content-Type: text/html; charset=utf-8
+Date: Wed, 18 May 2022 07:49:30 GMT
+Expires: -1
+Pragma: no-cache
+Set-Cookie: acw_tc=2f624a6f16528601701273707e49585f039d0cda28577bfd140ea66d164ea9;path=/;HttpOnly;Max-Age=1800
+Set-Cookie: auth=0102D6CDC1F0A238DA08FED6DD6DC2F638DA0801163300630071007800610066006F0073006D00340076006B0066006B00760064006A006B006C0062006100710000012F00FF6112CF47521A96F8B51238B528ECD0E3C3F0FF59; domain=zjyapp.icve.com.cn; expires=Wed, 18-May-2022 17:49:30 GMT; path=/; HttpOnly; SameSite=Lax
+X-Powered-By: TXTEK
+X-Route-Ip: 172.16.0.26:82
+X-Upstream: 0-26
+
+{"code":1,"userType":1,"token":"3cqxafosm4vkfkvdjklbaq","userName":"2011307","secondUserName":"","userId":"3cqxafosm4vkfkvdjklbaq","newToken":"@44d54b6fd4c94c6fa31e5fe3fc0f9019","displayName":"徐其超","employeeNumber":"2011307","url":"https://file.icve.com.cn/ssykt/380/252/5F23F2A1867C75B3DAF56320C228E15F.jpg?x-oss-process=image/resize,m_fixed,w_80,h_80,limit_0","schoolName":"咸宁职业技术学院","schoolId":"ljq1ab-oz7hbmaardmy-2q","isValid":1,"isNeedMergeUserName":0,"isZjyUser":1,"isGameUser":0,"isNeedUpdatePwd":0,"pwdMsg":""}
+2022/05/18 15:49:30.132176 DEBUG [req] POST https://zjyapp.icve.com.cn/newMobileAPI/FaceTeach/getStuFaceTeachList
+POST /newMobileAPI/FaceTeach/getStuFaceTeachList HTTP/1.1
+Host: zjyapp.icve.com.cn
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+Content-Length: 93
+Content-Type: application/x-www-form-urlencoded
+Cookie: acw_tc=2f624a6f16528601701273707e49585f039d0cda28577bfd140ea66d164ea9; auth=0102D6CDC1F0A238DA08FED6DD6DC2F638DA0801163300630071007800610066006F0073006D00340076006B0066006B00760064006A006B006C0062006100710000012F00FF6112CF47521A96F8B51238B528ECD0E3C3F0FF59
+Device: e0e826372a632f59651798e7edb043a9
+Emit: 1652860166000
+Accept-Encoding: gzip
+
+faceDate=2022-05-18&newToken=%4044d54b6fd4c94c6fa31e5fe3fc0f9019&stuId=3cqxafosm4vkfkvdjklbaq
+HTTP/1.1 200 OK
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+Access-Control-Allow-Origin: *
+Cache-Control: no-cache
+Content-Length: 370
+Content-Type: text/html; charset=utf-8
+Date: Wed, 18 May 2022 07:49:30 GMT
+Expires: -1
+Pragma: no-cache
+X-Powered-By: TXTEK
+X-Route-Ip: 172.16.0.26:82
+X-Upstream: 0-26
+
+{"code":1,"msg":"请求成功！","dataList":[{"Id":"bw7tajmud4bnkfjvd00aoa","courseOpenId":"3o0varasrjtigrm2f8nqzq","courseName":"光纤通信技术","className":"20电信1班","Title":"2022-05-18周三的课堂教学","openClassId":"1jlsajmu3k5kebpqq5dhvg","dateCreated":"2022-05-18 14:23","teachDate":"2022-05-18","classSection":"5-8","Address":"信7309","state":2}]}
+2022/05/18 15:50:30.219827 DEBUG [req] POST https://zjyapp.icve.com.cn/newMobileAPI/FaceTeach/getStuFaceTeachList
+POST /newMobileAPI/FaceTeach/getStuFaceTeachList HTTP/1.1
+Host: zjyapp.icve.com.cn
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+Content-Length: 93
+Content-Type: application/x-www-form-urlencoded
+Cookie: acw_tc=2f624a6f16528601701273707e49585f039d0cda28577bfd140ea66d164ea9; auth=0102D6CDC1F0A238DA08FED6DD6DC2F638DA0801163300630071007800610066006F0073006D00340076006B0066006B00760064006A006B006C0062006100710000012F00FF6112CF47521A96F8B51238B528ECD0E3C3F0FF59
+Device: e0e826372a632f59651798e7edb043a9
+Emit: 1652860166000
+Accept-Encoding: gzip
+
+faceDate=2022-05-18&newToken=%4044d54b6fd4c94c6fa31e5fe3fc0f9019&stuId=3cqxafosm4vkfkvdjklbaq
+HTTP/1.1 200 OK
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+Access-Control-Allow-Origin: *
+Cache-Control: no-cache
+Content-Length: 370
+Content-Type: text/html; charset=utf-8
+Date: Wed, 18 May 2022 07:50:30 GMT
+Expires: -1
+Pragma: no-cache
+X-Powered-By: TXTEK
+X-Route-Ip: 172.16.0.216:82
+X-Upstream: 0-216
+
+{"code":1,"msg":"请求成功！","dataList":[{"Id":"bw7tajmud4bnkfjvd00aoa","courseOpenId":"3o0varasrjtigrm2f8nqzq","courseName":"光纤通信技术","className":"20电信1班","Title":"2022-05-18周三的课堂教学","openClassId":"1jlsajmu3k5kebpqq5dhvg","dateCreated":"2022-05-18 14:23","teachDate":"2022-05-18","classSection":"5-8","Address":"信7309","state":2}]}
+2022/05/18 15:51:30.338917 DEBUG [req] POST https://zjyapp.icve.com.cn/newMobileAPI/FaceTeach/getStuFaceTeachList
+POST /newMobileAPI/FaceTeach/getStuFaceTeachList HTTP/1.1
+Host: zjyapp.icve.com.cn
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+Content-Length: 93
+Content-Type: application/x-www-form-urlencoded
+Cookie: acw_tc=2f624a6f16528601701273707e49585f039d0cda28577bfd140ea66d164ea9; auth=0102D6CDC1F0A238DA08FED6DD6DC2F638DA0801163300630071007800610066006F0073006D00340076006B0066006B00760064006A006B006C0062006100710000012F00FF6112CF47521A96F8B51238B528ECD0E3C3F0FF59
+Device: e0e826372a632f59651798e7edb043a9
+Emit: 1652860166000
+Accept-Encoding: gzip
+
+faceDate=2022-05-18&newToken=%4044d54b6fd4c94c6fa31e5fe3fc0f9019&stuId=3cqxafosm4vkfkvdjklbaq
+HTTP/1.1 200 OK
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+Access-Control-Allow-Origin: *
+Cache-Control: no-cache
+Content-Length: 370
+Content-Type: text/html; charset=utf-8
+Date: Wed, 18 May 2022 07:51:30 GMT
+Expires: -1
+Pragma: no-cache
+X-Powered-By: TXTEK
+X-Route-Ip: 172.16.0.9:82
+X-Upstream: 0-9
+
+{"code":1,"msg":"请求成功！","dataList":[{"Id":"bw7tajmud4bnkfjvd00aoa","courseOpenId":"3o0varasrjtigrm2f8nqzq","courseName":"光纤通信技术","className":"20电信1班","Title":"2022-05-18周三的课堂教学","openClassId":"1jlsajmu3k5kebpqq5dhvg","dateCreated":"2022-05-18 14:23","teachDate":"2022-05-18","classSection":"5-8","Address":"信7309","state":2}]}
