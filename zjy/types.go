@@ -5,6 +5,7 @@ var (
 	sendKey string
 )
 
+// 这个可以和下面的合并
 type Msg struct {
 	Code     int    `json:"code"`
 	Msg      string `json:"msg"`
@@ -14,6 +15,8 @@ type res struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
 }
+
+//  上面两个结构体 下次开发的时候可以合并一下
 type UserInfo struct {
 	Code        int    `json:"code"`
 	Msg         string `json:"msg"`
@@ -40,15 +43,31 @@ type Classroom struct {
 }
 type ClassRoomInfo struct {
 	ID          string `json:"Id"`
-	KID         string
+	KID         string // 这个就是留着
 	DataType    string `json:"DataType"`
 	SignType    int    `json:"SignType"`
 	Gesture     string `json:"Gesture"`
 	OpenClassID string
 	State       int `json:"State"`
 }
-type Config struct {
-	User    string
-	Pass    string
-	SendKey string
+
+// 配置文件
+// User  登陆账号
+// Pass  登陆密码
+// 通知的Key
+type config struct {
+	User, Pass, SendKey string
 }
+
+func NewConfig(user, pass, key string) *config {
+	return &config{
+		User:    user,
+		Pass:    pass,
+		SendKey: key,
+	}
+}
+
+type Study interface {
+}
+
+// zyj.run(config)
